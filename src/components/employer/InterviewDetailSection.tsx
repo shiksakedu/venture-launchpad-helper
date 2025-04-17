@@ -32,6 +32,13 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface InterviewDetail {
   id: number;
@@ -105,6 +112,8 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
   const { toast } = useToast();
   const [candidateFeedback, setCandidateFeedback] = useState("");
   const [aiInterviewerFeedback, setAiInterviewerFeedback] = useState("");
+  const [candidateRating, setCandidateRating] = useState("");
+  const [aiInterviewerRating, setAiInterviewerRating] = useState("");
   
   const handleSubmitFeedback = () => {
     toast({
@@ -114,7 +123,7 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
   };
   
   if (!interviewId) {
-    // Return null instead of the placeholder card when no interview is selected
+    // Return null when no interview is selected
     return null;
   }
   
@@ -314,7 +323,7 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
             )}
           </TabsContent>
           
-          {/* New Feedback Tab */}
+          {/* Updated Feedback Tab with Dropdown Menus */}
           <TabsContent value="feedback" className="space-y-6">
             <Card>
               <CardHeader className="py-4 px-4">
@@ -323,7 +332,26 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
                   Provide your feedback about the candidate's performance
                 </CardDescription>
               </CardHeader>
-              <CardContent className="py-2 px-4">
+              <CardContent className="py-2 px-4 space-y-4">
+                <div>
+                  <label className="text-sm font-medium block mb-1">Candidate Rating</label>
+                  <Select
+                    value={candidateRating}
+                    onValueChange={setCandidateRating}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select candidate rating" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="excellent">Excellent</SelectItem>
+                      <SelectItem value="good">Good</SelectItem>
+                      <SelectItem value="average">Average</SelectItem>
+                      <SelectItem value="below-average">Below Average</SelectItem>
+                      <SelectItem value="poor">Poor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
                 <Textarea 
                   placeholder="Enter your feedback about the candidate here..."
                   className="min-h-[120px]"
@@ -340,7 +368,26 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
                   Provide your feedback about the AI interviewer's performance
                 </CardDescription>
               </CardHeader>
-              <CardContent className="py-2 px-4">
+              <CardContent className="py-2 px-4 space-y-4">
+                <div>
+                  <label className="text-sm font-medium block mb-1">AI Interviewer Rating</label>
+                  <Select
+                    value={aiInterviewerRating}
+                    onValueChange={setAiInterviewerRating}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select AI interviewer rating" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="excellent">Excellent</SelectItem>
+                      <SelectItem value="good">Good</SelectItem>
+                      <SelectItem value="average">Average</SelectItem>
+                      <SelectItem value="below-average">Below Average</SelectItem>
+                      <SelectItem value="poor">Poor</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
                 <Textarea 
                   placeholder="Enter your feedback about the AI interviewer here..."
                   className="min-h-[120px]"

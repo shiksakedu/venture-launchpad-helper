@@ -168,13 +168,13 @@ const EmployerDashboard = () => {
               </>
             )}
             
-            {/* Interviews layout - Changed to only show when an interview is selected */}
+            {/* Interviews layout - Modified to make interview list take full width when no interview selected */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
-                className="lg:col-span-1"
+                className={`${selectedInterviewId ? 'lg:col-span-1' : 'lg:col-span-3'}`}
               >
                 <InterviewsListSection onSelectInterview={setSelectedInterviewId} />
               </motion.div>
