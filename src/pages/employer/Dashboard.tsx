@@ -168,7 +168,7 @@ const EmployerDashboard = () => {
               </>
             )}
             
-            {/* Third row - Interviews */}
+            {/* Interviews layout - Changed to only show when an interview is selected */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}

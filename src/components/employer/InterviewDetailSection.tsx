@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   Card, 
   CardContent, 
@@ -19,6 +19,7 @@ import {
   Clock,
   Download,
   FileText,
+  MessageSquare,
   Play,
   Star,
   User,
@@ -29,6 +30,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 
 interface InterviewDetail {
   id: number;
@@ -99,19 +102,20 @@ const mockInterviewDetail: InterviewDetail = {
 const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
   // In a real app, you would fetch the interview details based on the ID
   const interview = mockInterviewDetail;
+  const { toast } = useToast();
+  const [candidateFeedback, setCandidateFeedback] = useState("");
+  const [aiInterviewerFeedback, setAiInterviewerFeedback] = useState("");
+  
+  const handleSubmitFeedback = () => {
+    toast({
+      title: "Feedback Submitted",
+      description: "Your feedback has been recorded successfully.",
+    });
+  };
   
   if (!interviewId) {
-    return (
-      <Card className="glass-morphism h-full flex items-center justify-center">
-        <CardContent className="py-10 text-center">
-          <Video className="h-12 w-12 mx-auto mb-4 text-muted-foreground opacity-50" />
-          <h3 className="text-lg font-medium">No Interview Selected</h3>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto mt-2">
-            Select an interview from the list above to view detailed information and analysis.
-          </p>
-        </CardContent>
-      </Card>
-    );
+    // Return null instead of the placeholder card when no interview is selected
+    return null;
   }
   
   return (
@@ -152,7 +156,7 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
       
       <CardContent className="space-y-4">
         <Tabs defaultValue="video" className="w-full">
-          <TabsList className="grid grid-cols-3 mb-2">
+          <TabsList className="grid grid-cols-4 mb-2">
             <TabsTrigger value="video">
               <Play className="h-4 w-4 mr-2" />
               Interview
@@ -164,6 +168,10 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
             <TabsTrigger value="transcript">
               <FileText className="h-4 w-4 mr-2" />
               Transcript
+            </TabsTrigger>
+            <TabsTrigger value="feedback">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              Feedback
             </TabsTrigger>
           </TabsList>
           
@@ -304,6 +312,49 @@ const InterviewDetailSection = ({ interviewId }: { interviewId?: number }) => {
                 <p className="text-muted-foreground">Transcript not available for this interview.</p>
               </div>
             )}
+          </TabsContent>
+          
+          {/* New Feedback Tab */}
+          <TabsContent value="feedback" className="space-y-6">
+            <Card>
+              <CardHeader className="py-4 px-4">
+                <CardTitle className="text-base">Candidate Feedback</CardTitle>
+                <CardDescription>
+                  Provide your feedback about the candidate's performance
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="py-2 px-4">
+                <Textarea 
+                  placeholder="Enter your feedback about the candidate here..."
+                  className="min-h-[120px]"
+                  value={candidateFeedback}
+                  onChange={(e) => setCandidateFeedback(e.target.value)}
+                />
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="py-4 px-4">
+                <CardTitle className="text-base">AI Interviewer Feedback</CardTitle>
+                <CardDescription>
+                  Provide your feedback about the AI interviewer's performance
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="py-2 px-4">
+                <Textarea 
+                  placeholder="Enter your feedback about the AI interviewer here..."
+                  className="min-h-[120px]"
+                  value={aiInterviewerFeedback}
+                  onChange={(e) => setAiInterviewerFeedback(e.target.value)}
+                />
+              </CardContent>
+            </Card>
+            
+            <div className="flex justify-end">
+              <Button onClick={handleSubmitFeedback}>
+                Submit Feedback
+              </Button>
+            </div>
           </TabsContent>
         </Tabs>
       </CardContent>
