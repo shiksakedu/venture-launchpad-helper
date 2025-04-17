@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import EnhancedBackground from "@/components/EnhancedBackground";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, Users, Calendar } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useTheme } from "@/components/ThemeProvider";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, Link } from "react-router-dom";
@@ -63,22 +63,6 @@ const EmployerDashboard = () => {
               >
                 Dashboard
               </Button>
-              <Button 
-                variant={activeSection === "interviews" ? "default" : "ghost"}
-                className="text-sm"
-                onClick={() => setActiveSection("interviews")}
-              >
-                <Calendar className="mr-1 h-4 w-4" />
-                Interviews
-              </Button>
-              <Button 
-                variant={activeSection === "candidates" ? "default" : "ghost"}
-                className="text-sm"
-                onClick={() => setActiveSection("candidates")}
-              >
-                <Users className="mr-1 h-4 w-4" />
-                Candidates
-              </Button>
             </div>
             
             <div className="flex items-center gap-3">
@@ -111,10 +95,8 @@ const EmployerDashboard = () => {
         {/* Mobile Navigation */}
         <div className="md:hidden fixed bottom-0 inset-x-0 z-40 py-2 px-4 bg-background border-t">
           <Tabs defaultValue="dashboard" value={activeSection} onValueChange={setActiveSection} className="w-full">
-            <TabsList className="grid grid-cols-3 w-full">
+            <TabsList className="grid grid-cols-1 w-full">
               <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="interviews">Interviews</TabsTrigger>
-              <TabsTrigger value="candidates">Candidates</TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
@@ -148,40 +130,6 @@ const EmployerDashboard = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <CandidateMatchesSection />
-                </motion.div>
-              </TabsContent>
-              
-              <TabsContent value="interviews">
-                {/* Interviews tab content */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5 }}
-                    className="lg:col-span-1"
-                  >
-                    <InterviewsListSection onSelectInterview={setSelectedInterviewId} />
-                  </motion.div>
-                  
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="lg:col-span-2"
-                  >
-                    <InterviewDetailSection interviewId={selectedInterviewId} />
-                  </motion.div>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="candidates">
-                {/* Candidates tab content */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5 }}
                 >
                   <CandidateMatchesSection />
                 </motion.div>
@@ -220,18 +168,18 @@ const EmployerDashboard = () => {
               </>
             )}
             
-            {(activeSection === "dashboard" || activeSection === "interviews") && (
-              /* Third row - Interviews */
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="lg:col-span-1"
-                >
-                  <InterviewsListSection onSelectInterview={setSelectedInterviewId} />
-                </motion.div>
-                
+            {/* Third row - Interviews */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="lg:col-span-1"
+              >
+                <InterviewsListSection onSelectInterview={setSelectedInterviewId} />
+              </motion.div>
+              
+              {selectedInterviewId && (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -240,18 +188,8 @@ const EmployerDashboard = () => {
                 >
                   <InterviewDetailSection interviewId={selectedInterviewId} />
                 </motion.div>
-              </div>
-            )}
-            
-            {activeSection === "candidates" && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <CandidateMatchesSection />
-              </motion.div>
-            )}
+              )}
+            </div>
           </div>
         </main>
         
